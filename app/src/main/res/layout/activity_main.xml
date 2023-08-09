@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/outline_add_circle_outline_24"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/cd_floatingActionButton" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/expenseIncomeFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButton"
+        app:srcCompat="@drawable/baseline_add_24"
+        android:contentDescription="@string/cd_expenseIncomeFloatingActionButton" />
+
+    <TextView
+        android:id="@+id/expenseIncomeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/t_expenseIncomeTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/expenseIncomeFloatingActionButton"
+        app:layout_constraintEnd_toStartOf="@+id/expenseIncomeFloatingActionButton"
+        app:layout_constraintTop_toTopOf="@+id/expenseIncomeFloatingActionButton" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/recurringExpenseIncomeFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toTopOf="@+id/expenseIncomeFloatingActionButton"
+        app:layout_constraintEnd_toEndOf="@+id/expenseIncomeFloatingActionButton"
+        app:layout_constraintStart_toStartOf="@+id/expenseIncomeFloatingActionButton"
+        app:srcCompat="@drawable/baseline_replay_24"
+        android:contentDescription="@string/cd_recurringExpenseIncomeFloatingActionButton" />
+
+    <TextView
+        android:id="@+id/recurringExpenseIncomeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/t_recurringExpenseIncomeTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/recurringExpenseIncomeFloatingActionButton"
+        app:layout_constraintEnd_toStartOf="@+id/recurringExpenseIncomeFloatingActionButton"
+        app:layout_constraintTop_toTopOf="@+id/recurringExpenseIncomeFloatingActionButton" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.104" />
+</androidx.constraintlayout.widget.ConstraintLayout>

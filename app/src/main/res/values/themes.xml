@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AndroidProject" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+<!--    <style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
+<!--        <item name="android:focusedMonthDateColor">#E30D0D</item>-->
+<!--        <item name="android:weekNumberColor">#0420B1</item>-->
+<!--        <item name="android:weekDayTextAppearance">@style/CardView.Dark</item>-->
+<!--        <item name="android:dateTextAppearance">@style/CardView.Light</item>-->
+<!--    </style>-->
+
+
+    <style name="Theme.AndroidProject" parent="Base.Theme.AndroidProject" />
+</resources>

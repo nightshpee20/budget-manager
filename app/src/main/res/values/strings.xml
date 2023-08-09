@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Android Project</string>
+
+    <!-- android:text -->
+    <string name="t_expenseIncomeTextView">Add Expense/Income</string>
+    <string name="t_recurringExpenseIncomeTextView">Add Recurring Expense/Income</string>
+
+    <string name="t_expenseIncomeDescriptionTextView">Description</string>
+    <string name="t_expenseIncomeAmountTextView">Amount</string>
+
+    <!-- android:contentDescription -->
+    <string name="cd_floatingActionButton">Floating Action Button Menu</string>
+    <string name="cd_expenseIncomeFloatingActionButton">Add Expense/Income Floating Action Button</string>
+    <string name="cd_recurringExpenseIncomeFloatingActionButton">Add Recurring Expense/Income Floating Action Button</string>
+</resources>
