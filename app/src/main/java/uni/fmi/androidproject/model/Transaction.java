@@ -1,5 +1,8 @@
 package uni.fmi.androidproject.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Transaction {
     public static final String T_TRANSACTION = "T_TRANSACTION",
                                ID = "ID",
@@ -11,19 +14,30 @@ public class Transaction {
     private Integer id;
     private String description;
     private Double amount;
-    private String date;
+    private Date date;
+    private String formattedDate;
     private Boolean isExpense;
     private Boolean isRecurring;
 
-    public Transaction() {}
+    private final SimpleDateFormat simpleDateFormat;
 
-    public Transaction(Integer id, String description, Double amount, String date, Boolean isExpense, Boolean isRecurring) {
-        this.id = id;
+    public Transaction() {
+        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    }
+
+    public Transaction(String description, Double amount, Date date, Boolean isExpense, Boolean isRecurring) {
+        this();
         this.description = description;
         this.amount = amount;
         this.date = date;
+        formattedDate = simpleDateFormat.format(date);
         this.isExpense = isExpense;
         this.isRecurring = isRecurring;
+    }
+
+    public Transaction(Integer id, String description, Double amount, Date date, Boolean isExpense, Boolean isRecurring) {
+        this(description, amount, date, isExpense, isRecurring);
+        this.id = id;
     }
 
     @Override
@@ -32,7 +46,7 @@ public class Transaction {
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
-                ", date='" + date + '\'' +
+                ", date='" + formattedDate + '\'' +
                 ", isExpense=" + isExpense +
                 ", isRecurring=" + isRecurring +
                 " }";
@@ -62,12 +76,17 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
+        formattedDate = null == date ? null : simpleDateFormat.format(date);
+    }
+
+    public String getFormattedDate() {
+        return formattedDate;
     }
 
     public Boolean getIsExpense() {

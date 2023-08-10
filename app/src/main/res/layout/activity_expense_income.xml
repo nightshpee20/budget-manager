@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ExpenseIncomeActivity">
+
+    <TextView
+        android:id="@+id/expenseIncomeDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/t_expenseIncomeDescriptionTextView"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeDateTextView" />
+
+    <EditText
+        android:id="@+id/expenseIncomeDescriptionEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLength="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeDescriptionTextView" />
+
+    <TextView
+        android:id="@+id/expenseIncomeAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/t_expenseIncomeAmountTextView"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeDescriptionEditText" />
+
+    <EditText
+        android:id="@+id/expenseIncomeAmountEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeAmountTextView" />
+
+    <ImageButton
+        android:id="@+id/expenseIncomeAddButton"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:onClick="addButtonOnClick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeIsRecurringSwitch"
+        app:srcCompat="@drawable/baseline_save_24" />
+
+    <ImageButton
+        android:id="@+id/expenseIncomeGoBackButton"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:onClick="goBackButtonOnClick"
+        android:src="@drawable/baseline_backspace_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeIsRecurringSwitch" />
+
+    <Switch
+        android:id="@+id/expenseIncomeIsExpenseSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:checked="true"
+        android:onClick="isExpenseSwitchOnClick"
+        android:text="@string/t_expenseIncomeIsExpenseSwitch"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeAmountEditText" />
+
+    <TextView
+        android:id="@+id/expenseIncomeDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/t_expenseIncomeDateTextView"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeLabelTextView" />
+
+    <TextView
+        android:id="@+id/expenseIncomeLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/t_expenseIncomeLabelTextView"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/expenseIncomeIsExpenseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/t_expenseIncomeIsExpenseTextView"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/expenseIncomeIsExpenseSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeAmountEditText" />
+
+    <Switch
+        android:id="@+id/expenseIncomeIsRecurringSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:onClick="isRecurringSwitchOnClick"
+        android:text="@string/t_expenseIncomeIsRecurringSwitch"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeIsExpenseSwitch" />
+
+    <TextView
+        android:id="@+id/expenseIncomeIsRecurringTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/t_expenseIncomeIsRecurringTextView"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/expenseIncomeIsRecurringSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/expenseIncomeIsExpenseSwitch" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

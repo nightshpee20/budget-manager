@@ -5,8 +5,15 @@
     <string name="t_expenseIncomeTextView">Add Expense/Income</string>
     <string name="t_recurringExpenseIncomeTextView">Add Recurring Expense/Income</string>
 
-    <string name="t_expenseIncomeDescriptionTextView">Description</string>
-    <string name="t_expenseIncomeAmountTextView">Amount</string>
+    <string name="t_expenseIncomeLabelTextView">Add Expense/Income</string>
+    <string name="t_expenseIncomeDescriptionTextView">Description:</string>
+    <string name="t_expenseIncomeAmountTextView">Amount:</string>
+    <string name="t_expenseIncomeIsExpenseSwitch">Type: </string>
+    <string name="t_expenseIncomeDateTextView">Date:</string>
+    <string name="t_expenseIncomeIsExpenseTextView">Expense</string>
+    <string name="t_expenseIncomeIsRecurringSwitch">Is Recurring: </string>
+    <string name="t_expenseIncomeIsRecurringTextView">False</string>
+    <string name="t_balanceTextView">Balance on </string>
 
     <!-- android:contentDescription -->
     <string name="cd_floatingActionButton">Floating Action Button Menu</string>

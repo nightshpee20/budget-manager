@@ -13,7 +13,7 @@
         android:theme="@style/Theme.AndroidProject"
         tools:targetApi="31">
         <activity
-            android:name=".activity.AddExpenseIncomeActivity"
+            android:name=".activity.ExpenseIncomeActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"

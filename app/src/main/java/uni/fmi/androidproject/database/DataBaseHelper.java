@@ -1,13 +1,10 @@
 package uni.fmi.androidproject.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
-
-import uni.fmi.androidproject.model.Transaction;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -23,8 +20,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 DESCRIPTION TEXT,
                 AMOUNT REAL,
                 DATE TEXT,
-                IS_EXPENSE BOOL,
-                IS_RECURRING BOOL
+                IS_EXPENSE INTEGER,
+                IS_RECURRING INTEGER
             )
         """;
         sqLiteDatabase.execSQL(createTableStatement);

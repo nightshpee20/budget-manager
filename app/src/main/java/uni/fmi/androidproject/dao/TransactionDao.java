@@ -1,9 +1,13 @@
 package uni.fmi.androidproject.dao;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import uni.fmi.androidproject.database.DataBaseHelper;
@@ -13,34 +17,76 @@ import static uni.fmi.androidproject.model.Transaction.*;
 
 public class TransactionDao {
     private final DataBaseHelper dataBaseHelper;
+    private final SimpleDateFormat simpleDateFormat;
 
     public TransactionDao(DataBaseHelper dataBaseHelper) {
         this.dataBaseHelper = dataBaseHelper;
+        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     }
 
     public List<Transaction> getTransactionByFilter(Transaction filter) {
         List<Transaction> result = new ArrayList<>();
 
-        String query = String.format(
-                """
-                SELECT * FROM %s
-                """,
-                T_TRANSACTION);
+        String description = filter.getDescription();
+        Double amount = filter.getAmount();
+        String formattedDate = filter.getFormattedDate();
+        Boolean isExpense = filter.getIsExpense();
+        Boolean isRecurring = filter.getIsRecurring();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("SELECT * FROM ")
+                     .append(T_TRANSACTION)
+                     .append(" WHERE 1=1 ");
+
+        if (null != description && !description.isBlank())
+            stringBuilder.append(" AND description = '").append(description).append('\'');
+        if (null != amount && amount >= 0)
+            stringBuilder.append(" AND amount = ").append(amount);
+        if (null != formattedDate && !formattedDate.isBlank())
+            stringBuilder.append(" AND date = '").append(formattedDate).append('\'');
+        if (null != isExpense)
+            stringBuilder.append(" AND is_expense = ").append(isExpense);
+        if (null != isRecurring)
+            stringBuilder.append(" AND is_recurring = ").append(isRecurring);
+
+        try (SQLiteDatabase sqLiteDatabase = dataBaseHelper.getReadableDatabase();
+            Cursor cursor = sqLiteDatabase.rawQuery(stringBuilder.toString(), null)) {
+            if (!cursor.moveToFirst())
+                return result;
+
+            Integer id;
+            Date date = null;
+            do {
+                id = cursor.getInt(0);
+                description = cursor.getString(1);
+                amount = cursor.getDouble(2);
+                try {
+                    formattedDate = cursor.getString(3);
+                    date = null != formattedDate && !formattedDate.isBlank() ? simpleDateFormat.parse(formattedDate) : null;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                isExpense = cursor.getInt(4) == 1;
+                isRecurring = cursor.getInt(5) == 1;
+                Transaction transaction = new Transaction(id, description, amount, date, isExpense, isRecurring);
+                result.add(transaction);
+            } while (cursor.moveToNext());
+        }
 
         return result;
     }
 
     public boolean insertTransaction(Transaction transaction) {
-        SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        SQLiteDatabase sqLiteDatabase = dataBaseHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
 
-        cv.put(DESCRIPTION, transaction.getDescription());
-        cv.put(AMOUNT, transaction.getAmount());
-        cv.put(DATE, transaction.getDate());
-        cv.put(IS_EXPENSE, transaction.getIsExpense());
-        cv.put(IS_RECURRING, transaction.getIsRecurring());
+        contentValues.put(DESCRIPTION, transaction.getDescription());
+        contentValues.put(AMOUNT, transaction.getAmount());
+        contentValues.put(DATE, transaction.getFormattedDate());
+        contentValues.put(IS_EXPENSE, transaction.getIsExpense() ? 1 : 0);
+        contentValues.put(IS_RECURRING, transaction.getIsRecurring() ? 1 : 0);
 
-        long insert = db.insert(T_TRANSACTION,null,cv);
+        long insert = sqLiteDatabase.insert(T_TRANSACTION,null,contentValues);
         return insert != -1;
     }
 }
