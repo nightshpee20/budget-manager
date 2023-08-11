@@ -19,4 +19,19 @@
     <string name="cd_floatingActionButton">Floating Action Button Menu</string>
     <string name="cd_expenseIncomeFloatingActionButton">Add Expense/Income Floating Action Button</string>
     <string name="cd_recurringExpenseIncomeFloatingActionButton">Add Recurring Expense/Income Floating Action Button</string>
+    <string name="t_expenseIncomePeriodTextView">Interval:</string>
+
+    <string-array name="intervals">
+        <item>Every Day</item> <!-- 0 -->
+        <item>Every Week</item> <!-- 1 -->
+        <item>Every 2 Weeks</item> <!-- 2 -->
+        <item>Every 3 Weeks</item> <!-- 3 -->
+        <item>Every 4 Weeks</item> <!-- 4 -->
+        <item>Every Month</item> <!-- 5 -->
+        <item>Every 2 Months</item> <!-- 6 -->
+        <item>Every 3 Months</item> <!-- 7 -->
+        <item>Every 6 Months</item> <!-- 8 -->
+        <item>Every Year</item> <!-- 9 -->
+    </string-array>
+
 </resources>

@@ -16,6 +16,24 @@ import uni.fmi.androidproject.R;
 import uni.fmi.androidproject.model.Transaction;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView isExpenseImageView;
+        TextView descriptionTextView;
+        TextView amountTextView;
+        ImageView recurringImageView;
+        TextView recurringTextView;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            isExpenseImageView = itemView.findViewById(R.id.isExpenseImageView);
+            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView);
+            recurringImageView = itemView.findViewById(R.id.recurringImageView);
+            recurringTextView = itemView.findViewById(R.id.recurringTextView);
+        }
+    }
+
     private Context context;
     private List<Transaction> transactionList;
 
@@ -35,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
         Transaction transaction = transactionList.get(position);
-        holder.isExpenseImageView.setImageResource(transaction.getIsExpense() ? R.drawable.baseline_remove_circle_24 : R.drawable.baseline_add_circle_24);
+        holder.isExpenseImageView.setImageResource(transaction.getIsIncome() ? R.drawable.baseline_add_circle_24 : R.drawable.baseline_remove_circle_24);
         holder.descriptionTextView.setText(transaction.getDescription());
         holder.amountTextView.setText(transaction.getAmount().toString());
         holder.recurringImageView.setVisibility(transaction.getIsRecurring() ? View.VISIBLE : View.INVISIBLE);
@@ -47,21 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return transactionList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView isExpenseImageView;
-        TextView descriptionTextView;
-        TextView amountTextView;
-        ImageView recurringImageView;
-        TextView recurringTextView;
-
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            isExpenseImageView = itemView.findViewById(R.id.isExpenseImageView);
-            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
-            amountTextView = itemView.findViewById(R.id.amountTextView);
-            recurringImageView = itemView.findViewById(R.id.recurringImageView);
-            recurringTextView = itemView.findViewById(R.id.recurringTextView);
-        }
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 }

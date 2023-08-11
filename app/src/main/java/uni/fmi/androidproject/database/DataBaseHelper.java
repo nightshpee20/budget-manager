@@ -20,8 +20,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 DESCRIPTION TEXT,
                 AMOUNT REAL,
                 DATE TEXT,
-                IS_EXPENSE INTEGER,
-                IS_RECURRING INTEGER
+                IS_INCOME INTEGER,
+                IS_RECURRING INTEGER,
+                INTERVAL INTEGER
             )
         """;
         sqLiteDatabase.execSQL(createTableStatement);

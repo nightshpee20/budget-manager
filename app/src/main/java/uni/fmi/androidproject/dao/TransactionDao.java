@@ -30,8 +30,9 @@ public class TransactionDao {
         String description = filter.getDescription();
         Double amount = filter.getAmount();
         String formattedDate = filter.getFormattedDate();
-        Boolean isExpense = filter.getIsExpense();
+        Boolean isIncome = filter.getIsIncome();
         Boolean isRecurring = filter.getIsRecurring();
+        Integer interval = filter.getInterval();
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT * FROM ")
@@ -44,10 +45,12 @@ public class TransactionDao {
             stringBuilder.append(" AND amount = ").append(amount);
         if (null != formattedDate && !formattedDate.isBlank())
             stringBuilder.append(" AND date = '").append(formattedDate).append('\'');
-        if (null != isExpense)
-            stringBuilder.append(" AND is_expense = ").append(isExpense);
+        if (null != isIncome)
+            stringBuilder.append(" AND is_income = ").append(isIncome);
         if (null != isRecurring)
             stringBuilder.append(" AND is_recurring = ").append(isRecurring);
+        if (null != interval)
+            stringBuilder.append(" AND interval = ").append(interval);
 
         try (SQLiteDatabase sqLiteDatabase = dataBaseHelper.getReadableDatabase();
             Cursor cursor = sqLiteDatabase.rawQuery(stringBuilder.toString(), null)) {
@@ -66,9 +69,10 @@ public class TransactionDao {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                isExpense = cursor.getInt(4) == 1;
+                isIncome = cursor.getInt(4) == 1;
                 isRecurring = cursor.getInt(5) == 1;
-                Transaction transaction = new Transaction(id, description, amount, date, isExpense, isRecurring);
+                interval = cursor.getInt(6);
+                Transaction transaction = new Transaction(id, description, amount, date, isIncome, isRecurring, interval);
                 result.add(transaction);
             } while (cursor.moveToNext());
         }
@@ -83,8 +87,9 @@ public class TransactionDao {
         contentValues.put(DESCRIPTION, transaction.getDescription());
         contentValues.put(AMOUNT, transaction.getAmount());
         contentValues.put(DATE, transaction.getFormattedDate());
-        contentValues.put(IS_EXPENSE, transaction.getIsExpense() ? 1 : 0);
+        contentValues.put(IS_INCOME, transaction.getIsIncome() ? 1 : 0);
         contentValues.put(IS_RECURRING, transaction.getIsRecurring() ? 1 : 0);
+        contentValues.put(INTERVAL, transaction.getInterval());
 
         long insert = sqLiteDatabase.insert(T_TRANSACTION,null,contentValues);
         return insert != -1;

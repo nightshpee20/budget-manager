@@ -1,5 +1,7 @@
 package uni.fmi.androidproject.activity;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,9 +11,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,17 +27,19 @@ import uni.fmi.androidproject.model.Transaction;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityResultLauncher<Intent> startForResultLauncher;
+
     private FloatingActionButton floatingActionButton,
                                  expenseIncomeFloatingActionButton,
                                  recurringExpenseIncomeFloatingActionButton;
-    private TextView expenseIncomeTextView,
-                     recurringExpenseIncomeTextView;
     private Boolean areAllFabsVisible;
     private CalendarView calendarView;
     private RecyclerView transactionsRecyclerView;
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     private DataBaseHelper dataBaseHelper;
     private TransactionDao transactionDao;
+    private SimpleDateFormat simpleDateFormat;
 
     private String selectedDate;
 
@@ -46,13 +52,9 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floatingActionButton);
         expenseIncomeFloatingActionButton = findViewById(R.id.expenseIncomeFloatingActionButton);
         recurringExpenseIncomeFloatingActionButton = findViewById(R.id.recurringExpenseIncomeFloatingActionButton);
-        expenseIncomeTextView = findViewById(R.id.expenseIncomeTextView);
-        recurringExpenseIncomeTextView = findViewById(R.id.recurringExpenseIncomeTextView);
 
         expenseIncomeFloatingActionButton.setVisibility(View.GONE);
         recurringExpenseIncomeFloatingActionButton.setVisibility(View.GONE);
-        expenseIncomeTextView.setVisibility(View.GONE);
-        recurringExpenseIncomeTextView.setVisibility(View.GONE);
 
         areAllFabsVisible = false;
 
@@ -63,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         recurringExpenseIncomeFloatingActionButton.setOnClickListener(this::recurringExpenseIncomeFloatingActionButtonOnClick);
         calendarView.setOnDateChangeListener(this::calendarViewOnDateChange);
 
-        selectedDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        selectedDate = simpleDateFormat.format(new Date());
 
         dataBaseHelper = new DataBaseHelper(this);
         transactionDao = new TransactionDao(dataBaseHelper);
@@ -71,17 +74,35 @@ public class MainActivity extends AppCompatActivity {
         filter.setDate(new Date());
         List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
 
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(this, transactionList);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, transactionList);
         transactionsRecyclerView.setAdapter(recyclerViewAdapter);
         transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        startForResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK)
+                    updateRecyclerView();
+            }
+        );
+    }
+
+    public void updateRecyclerView() {
+        Transaction filter = new Transaction();
+        try {
+            filter.setDate(simpleDateFormat.parse(selectedDate));
+        } catch (ParseException e) {
+            Toast.makeText(this, "ERROR: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            return;
+        }
+        List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
+        recyclerViewAdapter.setTransactionList(transactionList);
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     public void floatingActionButtonOnClick(View view) {
         if (!areAllFabsVisible) {
             expenseIncomeFloatingActionButton.show();
             recurringExpenseIncomeFloatingActionButton.show();
-            expenseIncomeTextView.setVisibility(View.VISIBLE);
-            recurringExpenseIncomeTextView.setVisibility(View.VISIBLE);
 
             areAllFabsVisible = true;
 
@@ -90,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
         expenseIncomeFloatingActionButton.hide();
         recurringExpenseIncomeFloatingActionButton.hide();
-        expenseIncomeTextView.setVisibility(View.GONE);
-        recurringExpenseIncomeTextView.setVisibility(View.GONE);
 
         areAllFabsVisible = false;
     }
@@ -99,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
     public void expenseIncomeFloatingActionButtonOnClick(View view) {
         Intent intent = new Intent(this, ExpenseIncomeActivity.class);
         intent.putExtra("DATE", selectedDate);
-        startActivity(intent);
+//        startActivity(intent);
+        startForResultLauncher.launch(intent);
     }
 
     public void recurringExpenseIncomeFloatingActionButtonOnClick(View view) {
@@ -108,5 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void calendarViewOnDateChange(CalendarView calendarView, int year, int month, int dayOfMonth) {
         selectedDate = dayOfMonth+ "/" + ++month + "/" + year;
+        updateRecyclerView();
     }
 }

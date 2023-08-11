@@ -23,45 +23,25 @@
         android:id="@+id/expenseIncomeFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/cd_expenseIncomeFloatingActionButton"
         app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButton"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButton"
-        app:srcCompat="@drawable/baseline_add_24"
-        android:contentDescription="@string/cd_expenseIncomeFloatingActionButton" />
-
-    <TextView
-        android:id="@+id/expenseIncomeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/t_expenseIncomeTextView"
-        app:layout_constraintBottom_toBottomOf="@+id/expenseIncomeFloatingActionButton"
-        app:layout_constraintEnd_toStartOf="@+id/expenseIncomeFloatingActionButton"
-        app:layout_constraintTop_toTopOf="@+id/expenseIncomeFloatingActionButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
+        app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButton"
+        app:srcCompat="@drawable/baseline_add_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recurringExpenseIncomeFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/cd_recurringExpenseIncomeFloatingActionButton"
         app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/expenseIncomeFloatingActionButton"
-        app:layout_constraintEnd_toEndOf="@+id/expenseIncomeFloatingActionButton"
-        app:layout_constraintStart_toStartOf="@+id/expenseIncomeFloatingActionButton"
-        app:srcCompat="@drawable/baseline_replay_24"
-        android:contentDescription="@string/cd_recurringExpenseIncomeFloatingActionButton" />
-
-    <TextView
-        android:id="@+id/recurringExpenseIncomeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/t_recurringExpenseIncomeTextView"
-        app:layout_constraintBottom_toBottomOf="@+id/recurringExpenseIncomeFloatingActionButton"
-        app:layout_constraintEnd_toStartOf="@+id/recurringExpenseIncomeFloatingActionButton"
-        app:layout_constraintTop_toTopOf="@+id/recurringExpenseIncomeFloatingActionButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/expenseIncomeFloatingActionButton"
+        app:layout_constraintEnd_toStartOf="@+id/expenseIncomeFloatingActionButton"
+        app:layout_constraintTop_toTopOf="@+id/expenseIncomeFloatingActionButton"
+        app:srcCompat="@drawable/baseline_replay_24" />
 
     <CalendarView
         android:id="@+id/calendarView"
@@ -69,18 +49,16 @@
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.104" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/balanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="-24dp"
         android:text="@string/t_balanceTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -90,14 +68,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/transactionsRecyclerView"
         android:layout_width="411dp"
-        android:layout_height="274dp"
+        android:layout_height="320dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/balanceTextView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/balanceTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
