@@ -1,6 +1,8 @@
 package uni.fmi.androidproject.model;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Transaction {
@@ -15,30 +17,30 @@ public class Transaction {
     private Integer id;
     private String description;
     private Double amount;
-    private Date date;
+    private LocalDate date;
     private String formattedDate;
     private Boolean isIncome;
     private Boolean isRecurring;
     private Integer interval;
 
-    private final SimpleDateFormat simpleDateFormat;
+    private final DateTimeFormatter dateTimeFormatter;
 
     public Transaction() {
-        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
     }
 
-    public Transaction(String description, Double amount, Date date, Boolean isIncome, Boolean isRecurring, Integer interval) {
+    public Transaction(String description, Double amount, LocalDate date, Boolean isIncome, Boolean isRecurring, Integer interval) {
         this();
         this.description = description;
         this.amount = amount;
         this.date = date;
-        formattedDate = simpleDateFormat.format(date);
+        formattedDate = dateTimeFormatter.format(date);
         this.isIncome = isIncome;
         this.isRecurring = isRecurring;
         this.interval = interval;
     }
 
-    public Transaction(Integer id, String description, Double amount, Date date, Boolean isIncome, Boolean isRecurring, Integer interval) {
+    public Transaction(Integer id, String description, Double amount, LocalDate date, Boolean isIncome, Boolean isRecurring, Integer interval) {
         this(description, amount, date, isIncome, isRecurring, interval);
         this.id = id;
     }
@@ -80,13 +82,13 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
-        formattedDate = null == date ? null : simpleDateFormat.format(date);
+        formattedDate = null == date ? null : dateTimeFormatter.format(date);
     }
 
     public String getFormattedDate() {

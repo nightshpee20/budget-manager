@@ -17,11 +17,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String createTableStatement = """
             CREATE TABLE T_TRANSACTION (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                DESCRIPTION TEXT,
-                AMOUNT REAL,
-                DATE TEXT,
-                IS_INCOME INTEGER,
-                IS_RECURRING INTEGER,
+                DESCRIPTION TEXT NOT NULL,
+                AMOUNT REAL NOT NULL,
+                DATE INTEGER NOT NULL,
+                IS_INCOME INTEGER NOT NULL,
+                IS_RECURRING INTEGER NOT NULL,
                 INTERVAL INTEGER
             )
         """;

@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import uni.fmi.androidproject.R;
@@ -25,7 +27,7 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
     private Intent intent;
     private DataBaseHelper dataBaseHelper;
     private TransactionDao transactionDao;
-    private SimpleDateFormat simpleDateFormat;
+    private DateTimeFormatter dateTimeFormatter;
     private EditText descriptionEditText;
     private EditText amountEditText;
     private Switch isIncomeSwitch;
@@ -45,7 +47,7 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
         dataBaseHelper = new DataBaseHelper(this);
         transactionDao = new TransactionDao(dataBaseHelper);
 
-        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
 
         TextView dateTextView = findViewById(R.id.expenseIncomeDateTextView);
         dateTextView.append(" " + getIntent().getStringExtra("DATE"));
@@ -107,8 +109,8 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
         Boolean isExpense = isIncomeSwitch.isChecked();
         Boolean isRecurring = isRecurringSwitch.isChecked();
         String formattedDate = intent.getStringExtra("DATE");
+        LocalDate date = null != formattedDate && !formattedDate.isBlank() ? LocalDate.parse(formattedDate, dateTimeFormatter) : null;
         Double amount = null;
-        Date date = null;
 
         Integer interval = null;
         if (isRecurring) {
@@ -120,9 +122,8 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
         }
 
         try {
-            date = null != formattedDate && !formattedDate.isBlank() ? simpleDateFormat.parse(formattedDate) : null;
             amount = Double.parseDouble(amountEditText.getText().toString());
-        } catch (ParseException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             Toast.makeText(this, "ERROR: " + e.getMessage(), Toast.LENGTH_LONG).show();
             return;

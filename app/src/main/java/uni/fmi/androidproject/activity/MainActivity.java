@@ -11,13 +11,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import uni.fmi.androidproject.R;
@@ -31,15 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton floatingActionButton,
                                  expenseIncomeFloatingActionButton,
-                                 recurringExpenseIncomeFloatingActionButton;
+                                 backupFloatingActionButton;
     private Boolean areAllFabsVisible;
     private CalendarView calendarView;
+    private TextView balanceTextView;
     private RecyclerView transactionsRecyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
 
     private DataBaseHelper dataBaseHelper;
     private TransactionDao transactionDao;
-    private SimpleDateFormat simpleDateFormat;
+    private DateTimeFormatter dateTimeFormatter;
 
     private String selectedDate;
 
@@ -51,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         floatingActionButton = findViewById(R.id.floatingActionButton);
         expenseIncomeFloatingActionButton = findViewById(R.id.expenseIncomeFloatingActionButton);
-        recurringExpenseIncomeFloatingActionButton = findViewById(R.id.recurringExpenseIncomeFloatingActionButton);
+        backupFloatingActionButton = findViewById(R.id.backupFloatingActionButton);
 
         expenseIncomeFloatingActionButton.setVisibility(View.GONE);
-        recurringExpenseIncomeFloatingActionButton.setVisibility(View.GONE);
+        backupFloatingActionButton.setVisibility(View.GONE);
 
         areAllFabsVisible = false;
 
@@ -62,16 +61,18 @@ public class MainActivity extends AppCompatActivity {
 
         floatingActionButton.setOnClickListener(this::floatingActionButtonOnClick);
         expenseIncomeFloatingActionButton.setOnClickListener(this::expenseIncomeFloatingActionButtonOnClick);
-        recurringExpenseIncomeFloatingActionButton.setOnClickListener(this::recurringExpenseIncomeFloatingActionButtonOnClick);
+        backupFloatingActionButton.setOnClickListener(this::backupFloatingActionButtonOnClick);
         calendarView.setOnDateChangeListener(this::calendarViewOnDateChange);
+        balanceTextView = findViewById(R.id.balanceTextView);
 
-        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        selectedDate = simpleDateFormat.format(new Date());
+        dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+        selectedDate = LocalDate.now().format(dateTimeFormatter);
+
 
         dataBaseHelper = new DataBaseHelper(this);
         transactionDao = new TransactionDao(dataBaseHelper);
         Transaction filter = new Transaction();
-        filter.setDate(new Date());
+        filter.setDate(LocalDate.now());
         List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
 
         recyclerViewAdapter = new RecyclerViewAdapter(this, transactionList);
@@ -80,20 +81,21 @@ public class MainActivity extends AppCompatActivity {
 
         startForResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK)
+                if (result.getResultCode() == RESULT_OK) {
                     updateRecyclerView();
+                    LocalDate date = LocalDate.parse(selectedDate, dateTimeFormatter);
+                    updateBalanceTextView(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+                }
             }
         );
+
+        LocalDate date = LocalDate.parse(selectedDate, dateTimeFormatter);
+        updateBalanceTextView(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
     }
 
     public void updateRecyclerView() {
         Transaction filter = new Transaction();
-        try {
-            filter.setDate(simpleDateFormat.parse(selectedDate));
-        } catch (ParseException e) {
-            Toast.makeText(this, "ERROR: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            return;
-        }
+        filter.setDate(LocalDate.parse(selectedDate, dateTimeFormatter));
         List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
         recyclerViewAdapter.setTransactionList(transactionList);
         recyclerViewAdapter.notifyDataSetChanged();
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     public void floatingActionButtonOnClick(View view) {
         if (!areAllFabsVisible) {
             expenseIncomeFloatingActionButton.show();
-            recurringExpenseIncomeFloatingActionButton.show();
+            backupFloatingActionButton.show();
 
             areAllFabsVisible = true;
 
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         expenseIncomeFloatingActionButton.hide();
-        recurringExpenseIncomeFloatingActionButton.hide();
+        backupFloatingActionButton.hide();
 
         areAllFabsVisible = false;
     }
@@ -122,12 +124,21 @@ public class MainActivity extends AppCompatActivity {
         startForResultLauncher.launch(intent);
     }
 
-    public void recurringExpenseIncomeFloatingActionButtonOnClick(View view) {
-
+    public void backupFloatingActionButtonOnClick(View view) {
+        Intent intent = new Intent(this, RegisterLoginActivity.class);
+        startForResultLauncher.launch(intent);
     }
 
     public void calendarViewOnDateChange(CalendarView calendarView, int year, int month, int dayOfMonth) {
         selectedDate = dayOfMonth+ "/" + ++month + "/" + year;
+        updateBalanceTextView(year, month, dayOfMonth);
         updateRecyclerView();
+    }
+
+    private void updateBalanceTextView(int year, int month, int dayOfMonth) {
+        LocalDate date = LocalDate.of(year, month, dayOfMonth);
+        Double balance = transactionDao.getBalanceByEpochDay(date.toEpochDay());
+        String text = String.format("Balance: %.2f", balance);
+        balanceTextView.setText(text);
     }
 }

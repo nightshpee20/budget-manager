@@ -13,13 +13,20 @@
     <string name="t_expenseIncomeIsExpenseTextView">Expense</string>
     <string name="t_expenseIncomeIsRecurringSwitch">Is Recurring: </string>
     <string name="t_expenseIncomeIsRecurringTextView">False</string>
-    <string name="t_balanceTextView">Balance on </string>
+    <string name="t_balanceTextView">Balance on: </string>
 
     <!-- android:contentDescription -->
     <string name="cd_floatingActionButton">Floating Action Button Menu</string>
     <string name="cd_expenseIncomeFloatingActionButton">Add Expense/Income Floating Action Button</string>
     <string name="cd_recurringExpenseIncomeFloatingActionButton">Add Recurring Expense/Income Floating Action Button</string>
     <string name="t_expenseIncomePeriodTextView">Interval:</string>
+    <string name="t_registerLoginLabelTextView">Login/Register to Continue:</string>
+    <string name="t_registerLoginUsernameTextView">Username:</string>
+    <string name="h_registerLoginUsernameEditText">(6 – 32 Characters)</string>
+    <string name="t_registerLoginPasswordTextView">Password:</string>
+    <string name="h_registerLoginPasswordEditText">(6 – 32 Characters)</string>
+    <string name="t_registerLoginLoginButton">Login</string>
+    <string name="t_registerLoginRegisterButton">Register</string>
 
     <string-array name="intervals">
         <item>Every Day</item> <!-- 0 -->
