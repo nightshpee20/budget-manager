@@ -16,6 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import uni.fmi.androidproject.R;
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         Transaction filter = new Transaction();
         filter.setDate(LocalDate.now());
         List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
-
-        recyclerViewAdapter = new RecyclerViewAdapter(this, transactionList);
+        List<Transaction> filteredTransactionList = filterTransactionList(LocalDate.now(), LocalDate.now().toEpochDay(), transactionList);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, filteredTransactionList);
         transactionsRecyclerView.setAdapter(recyclerViewAdapter);
         transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -98,10 +100,75 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateRecyclerView() {
         Transaction filter = new Transaction();
-        filter.setDate(LocalDate.parse(selectedDate, dateTimeFormatter));
+        LocalDate filterDate = LocalDate.parse(selectedDate, dateTimeFormatter);
+        Long filterDateEpochDay = filterDate.toEpochDay();
+        filter.setDate(filterDate);
         List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
-        recyclerViewAdapter.setTransactionList(transactionList);
+        List<Transaction> filteredTransactionList = filterTransactionList(filterDate, filterDateEpochDay, transactionList);
+        recyclerViewAdapter.setTransactionList(filteredTransactionList);
         recyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    private List<Transaction> filterTransactionList(LocalDate filterDate, Long filterDateEpochDay, List<Transaction> transactionList) {
+        List<Transaction> filteredTransactionList = new ArrayList<>();
+        for (Transaction transaction : transactionList) {
+            if (transaction.getDate().equals(filterDate)) {
+                filteredTransactionList.add(transaction);
+                continue;
+            }
+
+            if (!transaction.getIsRecurring() && !transaction.getDate().equals(filterDate))
+                continue;
+            Long difference = filterDateEpochDay - transaction.getDate().toEpochDay();
+            switch (transaction.getInterval()) {
+                case 0:
+                    filteredTransactionList.add(transaction);
+                    break;
+                case 1:
+                    if (difference % 7 == 0)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 2:
+                    if (difference % 14 == 0)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 3:
+                    if (difference % 21 == 0)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 4:
+                    if (difference % 28 == 0)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 5:
+                    long monthsBetween = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
+                    if (Math.abs(monthsBetween) == 1)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 6:
+                    long monthsBetween1 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
+                    if (Math.abs(monthsBetween1) == 2)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 7:
+                    long monthsBetween2 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
+                    if (Math.abs(monthsBetween2) == 3)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 8:
+                    long monthsBetween3 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
+                    if (Math.abs(monthsBetween3) == 6)
+                        filteredTransactionList.add(transaction);
+                    break;
+                case 9:
+                    long monthsBetween4 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
+                    if (Math.abs(monthsBetween4) == 12)
+                        filteredTransactionList.add(transaction);
+                    break;
+            }
+        }
+
+        return filteredTransactionList;
     }
 
     public void floatingActionButtonOnClick(View view) {

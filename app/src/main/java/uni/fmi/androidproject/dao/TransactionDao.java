@@ -48,7 +48,7 @@ public class TransactionDao {
         if (null != amount && amount >= 0)
             stringBuilder.append(" AND amount = ").append(amount);
         if (null != date)
-            stringBuilder.append(" AND date = ").append(date.toEpochDay());
+            stringBuilder.append(" AND date <= ").append(date.toEpochDay());
         if (null != isIncome)
             stringBuilder.append(" AND is_income = ").append(isIncome);
         if (null != isRecurring)

@@ -105,7 +105,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
         }
 
         String hashedPassword = hashPassword(password);
-        String url = "http://192.168.88.60:8080/login";
+        String url = "http://192.168.165.60:8080/login";
         String json = "{\"user\": \"" + username + "\", \"pass\": \"" + hashedPassword + "\"}";
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody requestBody = RequestBody.create(json, mediaType);
@@ -137,7 +137,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                         List<Transaction> transactionList = transactionDao.getTransactionByFilter(new Transaction());
                         for (Transaction transaction : transactionList)
                             transaction.setUserId(id);
-                        String url = "http://192.168.88.60:8080/transaction/backup";
+                        String url = "http://192.168.165.60:8080/transaction/backup";
                         String json = gson.toJson(transactionList);
 
                         String setCookie = response.header("Set-Cookie");
@@ -157,12 +157,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         Toast.makeText(RegisterLoginActivity.this, "ERROR: Something went wrong backing up your data!", Toast.LENGTH_LONG).show();
-                                        try {
-                                            Thread.sleep(1000);
-                                        } catch (InterruptedException ex) {
-                                            throw new RuntimeException(ex);
-                                        }
-                                        finish();
+                                        goBack2ButtonOnClick(null);
                                     }
                                 });
                             }
@@ -173,19 +168,14 @@ public class RegisterLoginActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         Toast.makeText(RegisterLoginActivity.this, "SUCCESS: Data backed up successfully!", Toast.LENGTH_LONG).show();
-                                        try {
-                                            Thread.sleep(1000);
-                                        } catch (InterruptedException ex) {
-                                            throw new RuntimeException(ex);
-                                        }
-                                        finish();
+                                        goBack2ButtonOnClick(null);
                                     }
                                 });
                             }
                         });
                     } else if (endpoint.equals("DOWNLOAD")) {
                         List<Transaction> transactionList;
-                        String url = "http://192.168.88.60:8080/transaction/download";
+                        String url = "http://192.168.165.60:8080/transaction/download";
 
                         String setCookie = response.header("Set-Cookie");
                         String session = setCookie.substring(11);
@@ -203,7 +193,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         Toast.makeText(RegisterLoginActivity.this, "ERROR: Something went wrong downloading your data. Try again later!", Toast.LENGTH_LONG).show();
-                                        finish();
+                                        goBack2ButtonOnClick(null);
                                     }
                                 });
                             }
@@ -228,7 +218,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         Toast.makeText(RegisterLoginActivity.this, "SUCCESS: Data downloaded successfully!", Toast.LENGTH_LONG).show();
-                                        finish();
+                                        goBack2ButtonOnClick(null);
                                     }
                                 });
                             }
@@ -264,7 +254,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
         }
 
         String hashedPassword = hashPassword(password);
-        String url = "http://192.168.88.60:8080/register";
+        String url = "http://192.168.165.60:8080/register";
         String json = "{\"user\": \"" + username + "\", \"pass\": \"" + hashedPassword + "\"}";
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody requestBody = RequestBody.create(json, mediaType);
@@ -288,18 +278,24 @@ public class RegisterLoginActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (response.code() == 200) {
-//                    RegisterLoginActivity.this.runOnUiThread(() -> {
-//                        Toast.makeText(RegisterLoginActivity.this, "!!SUCCESSFUL REGISTRATION!!", Toast.LENGTH_LONG).show();
-
-//                        goBack2ButtonOnClick(null);
-//                    });
-                }
+                RegisterLoginActivity.this.runOnUiThread(() -> {
+                    switch (response.code()) {
+                        case 200 ->
+                                Toast.makeText(RegisterLoginActivity.this, "!!SUCCESSFUL REGISTRATION!! Now login to continue!", Toast.LENGTH_LONG).show();
+                        case 409 ->
+                                Toast.makeText(RegisterLoginActivity.this, "!!USERNAME TAKEN!! Try another one!", Toast.LENGTH_LONG).show();
+                    }
+                    loginButton.setEnabled(true);
+                    registerButton.setEnabled(true);
+                    goBackFloatingActionButton.setEnabled(true);
+                    pleaseWaitTextView.setVisibility(View.GONE);
+                });
             }
         });
     }
 
     public void goBack2ButtonOnClick(View view) {
+        setResult(RESULT_OK);
         finish();
     }
 

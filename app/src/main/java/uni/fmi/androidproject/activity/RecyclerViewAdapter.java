@@ -57,6 +57,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.descriptionTextView.setText(transaction.getDescription());
         holder.amountTextView.setText(transaction.getAmount().toString());
         holder.recurringImageView.setVisibility(transaction.getIsRecurring() ? View.VISIBLE : View.INVISIBLE);
+        String text = null;
+        if (transaction.getIsRecurring()) {
+            text = switch (transaction.getInterval()) {
+                case 0 -> "Every Day";
+                case 1 -> "Every Week";
+                case 2 -> "Every 2 Weeks";
+                case 3 -> "Every 3 Weeks";
+                case 4 -> "Every 4 Week";
+                case 5 -> "Every Month";
+                case 6 -> "Every 2 Months";
+                case 7 -> "Every 3 Months";
+                case 8 -> "Every 6 Months";
+                case 9 -> "Every Year";
+                default -> null;
+            };
+        }
+        if (text != null)
+            holder.recurringTextView.setText(text);
         holder.recurringTextView.setVisibility(transaction.getIsRecurring() ? View.VISIBLE : View.INVISIBLE);
     }
 
