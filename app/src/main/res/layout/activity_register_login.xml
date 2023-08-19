@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/registerLoginLoginUsernameTextView"
+        android:id="@+id/registerLoginUsernameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/registerLoginLabelTextView" />
 
     <EditText
-        android:id="@+id/registerLoginLoginUsernameEditText"
+        android:id="@+id/registerLoginUsernameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -41,10 +41,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginLoginUsernameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginUsernameTextView" />
 
     <TextView
-        android:id="@+id/registerLoginLoginPasswordTextView"
+        android:id="@+id/registerLoginPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -52,10 +52,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginLoginUsernameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginUsernameEditText" />
 
     <EditText
-        android:id="@+id/registerLoginLoginPasswordEditText"
+        android:id="@+id/registerLoginPasswordEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -65,100 +65,52 @@
         android:maxLength="32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginLoginPasswordTextView" />
-
-    <TextView
-        android:id="@+id/registerLoginRegisterUsernameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/t_registerLoginUsernameTextView"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="409dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginLoginButton" />
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginPasswordTextView" />
 
     <Button
         android:id="@+id/registerLoginLoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
         android:layout_marginTop="24dp"
         android:onClick="loginButtonOnClick"
         android:text="@string/t_registerLoginLoginButton"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginLoginPasswordEditText" />
-
-    <EditText
-        android:id="@+id/registerLoginRegisterUsernameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/h_registerLoginUsernameEditText"
-        android:inputType="text"
-        android:maxLength="32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginRegisterUsernameTextView" />
-
-    <TextView
-        android:id="@+id/registerLoginRegisterPasswordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/t_registerLoginPasswordTextView"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginRegisterUsernameEditText" />
-
-    <EditText
-        android:id="@+id/registerLoginRegisterPasswordEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/h_registerLoginPasswordEditText"
-        android:inputType="textPassword"
-        android:maxLength="32"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginRegisterPasswordTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginPleaseWaitTextView" />
 
     <Button
         android:id="@+id/registerLoginRegisterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="96dp"
         android:onClick="registerButtonOnClick"
         android:text="@string/t_registerLoginRegisterButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerLoginRegisterPasswordEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginPleaseWaitTextView" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/registerLoginGoBackButton"
+        android:id="@+id/registerLoginGoBackFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
         android:clickable="true"
         android:onClick="goBack2ButtonOnClick"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginLoginButton"
         app:srcCompat="@drawable/baseline_backspace_24" />
+
+    <TextView
+        android:id="@+id/registerLoginPleaseWaitTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/t_registerLoginPleaseWaitTextView"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerLoginPasswordEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

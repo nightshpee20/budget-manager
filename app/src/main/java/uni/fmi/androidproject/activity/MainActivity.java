@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton floatingActionButton,
                                  expenseIncomeFloatingActionButton,
-                                 backupFloatingActionButton;
+                                 backupFloatingActionButton,
+                                 downloadFloatingActionButton;
     private Boolean areAllFabsVisible;
     private CalendarView calendarView;
     private TextView balanceTextView;
@@ -51,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floatingActionButton);
         expenseIncomeFloatingActionButton = findViewById(R.id.expenseIncomeFloatingActionButton);
         backupFloatingActionButton = findViewById(R.id.backupFloatingActionButton);
+        downloadFloatingActionButton = findViewById(R.id.downloadFloatingActionButton);
 
         expenseIncomeFloatingActionButton.setVisibility(View.GONE);
         backupFloatingActionButton.setVisibility(View.GONE);
+        downloadFloatingActionButton.setVisibility(View.GONE);
 
         areAllFabsVisible = false;
 
@@ -62,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(this::floatingActionButtonOnClick);
         expenseIncomeFloatingActionButton.setOnClickListener(this::expenseIncomeFloatingActionButtonOnClick);
         backupFloatingActionButton.setOnClickListener(this::backupFloatingActionButtonOnClick);
+        downloadFloatingActionButton.setOnClickListener(this::downloadFloatingActionButtonOnClick);
         calendarView.setOnDateChangeListener(this::calendarViewOnDateChange);
         balanceTextView = findViewById(R.id.balanceTextView);
 
         dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
         selectedDate = LocalDate.now().format(dateTimeFormatter);
-
 
         dataBaseHelper = new DataBaseHelper(this);
         transactionDao = new TransactionDao(dataBaseHelper);
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         if (!areAllFabsVisible) {
             expenseIncomeFloatingActionButton.show();
             backupFloatingActionButton.show();
+            downloadFloatingActionButton.show();
 
             areAllFabsVisible = true;
 
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         expenseIncomeFloatingActionButton.hide();
         backupFloatingActionButton.hide();
+        downloadFloatingActionButton.show();
 
         areAllFabsVisible = false;
     }
@@ -126,6 +131,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void backupFloatingActionButtonOnClick(View view) {
         Intent intent = new Intent(this, RegisterLoginActivity.class);
+        intent.putExtra("ENDPOINT", "BACKUP");
+        startForResultLauncher.launch(intent);
+    }
+
+    public void downloadFloatingActionButtonOnClick(View view) {
+        Intent intent = new Intent(this, RegisterLoginActivity.class);
+        intent.putExtra("ENDPOINT", "DOWNLOAD");
         startForResultLauncher.launch(intent);
     }
 

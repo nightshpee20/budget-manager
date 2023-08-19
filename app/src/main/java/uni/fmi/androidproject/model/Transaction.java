@@ -1,11 +1,68 @@
 package uni.fmi.androidproject.model;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 public class Transaction {
+    public static class TransactionLocalDateDeserializer implements JsonDeserializer<LocalDate> {
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            long epochDay = json.getAsLong();
+            return LocalDate.ofEpochDay(epochDay);
+        }
+    }
+
+    public static class TransactionBooleanDeserializer implements JsonDeserializer<Boolean> {
+
+        @Override
+        public Boolean deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            int intValue = json.getAsInt();
+            return intValue != 0;
+        }
+    }
+
+    public static class ExcludeTransactionStrategy implements ExclusionStrategy {
+        @Override
+        public boolean shouldSkipField(FieldAttributes f) {
+            return f.getName().equals("formattedDate");
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
+        }
+    }
+
+    public static class TransactionSerializer implements JsonSerializer<Transaction> {
+        @Override
+        public JsonElement serialize(Transaction transaction, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("id", transaction.getId());
+            jsonObject.addProperty("description", transaction.getDescription());
+            jsonObject.addProperty("amount", transaction.getAmount());
+            jsonObject.addProperty("date", transaction.getDate().toEpochDay());
+            jsonObject.addProperty("isIncome", transaction.getIsIncome());
+            jsonObject.addProperty("isRecurring", transaction.getIsRecurring());
+            jsonObject.addProperty("interval", transaction.getInterval());
+            jsonObject.addProperty("userId",transaction.getUserId());
+
+            return jsonObject;
+        }
+    }
     public static final String T_TRANSACTION = "T_TRANSACTION",
                                ID = "ID",
                                DESCRIPTION = "DESCRIPTION",
@@ -22,6 +79,7 @@ public class Transaction {
     private Boolean isIncome;
     private Boolean isRecurring;
     private Integer interval;
+    private Integer userId;
 
     private final DateTimeFormatter dateTimeFormatter;
 
@@ -52,7 +110,7 @@ public class Transaction {
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
                 ", date='" + formattedDate + '\'' +
-                ", isExpense=" + isIncome +
+                ", isIncome=" + isIncome +
                 ", isRecurring=" + isRecurring +
                 ", interval=" + interval +
                 " }";
@@ -117,5 +175,13 @@ public class Transaction {
 
     public void setInterval(Integer interval) {
         this.interval = interval;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

@@ -27,6 +27,7 @@
     <string name="h_registerLoginPasswordEditText">(6 – 32 Characters)</string>
     <string name="t_registerLoginLoginButton">Login</string>
     <string name="t_registerLoginRegisterButton">Register</string>
+    <string name="t_registerLoginPleaseWaitTextView">!PLEASE WAIT!</string>
 
     <string-array name="intervals">
         <item>Every Day</item> <!-- 0 -->

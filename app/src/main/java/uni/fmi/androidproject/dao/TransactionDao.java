@@ -177,4 +177,12 @@ public class TransactionDao {
         }
         return budget;
     }
+
+    public void deleteAllRecords() {
+        try (SQLiteDatabase sqLiteDatabase = dataBaseHelper.getWritableDatabase()) {
+            sqLiteDatabase.delete(T_TRANSACTION, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
