@@ -31,6 +31,7 @@ public class TransactionDao {
     public List<Transaction> getTransactionByFilter(Transaction filter) {
         List<Transaction> result = new ArrayList<>();
 
+        Integer idField = filter.getId();
         String description = filter.getDescription();
         Double amount = filter.getAmount();
         LocalDate date = filter.getDate();
@@ -42,7 +43,8 @@ public class TransactionDao {
         stringBuilder.append("SELECT * FROM ")
                      .append(T_TRANSACTION)
                      .append(" WHERE 1=1 ");
-
+        if (null != idField && idField > 0)
+            stringBuilder.append(" AND id = ").append(idField);
         if (null != description && !description.isBlank())
             stringBuilder.append(" AND description = '").append(description).append('\'');
         if (null != amount && amount >= 0)
@@ -184,5 +186,11 @@ public class TransactionDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void deleteTransaction(Transaction transaction) {
+        SQLiteDatabase sqLiteDatabase = dataBaseHelper.getWritableDatabase();
+        sqLiteDatabase.delete(T_TRANSACTION, ID + " = ?", new String[] {transaction.getId() + ""});
+        sqLiteDatabase.close();
     }
 }

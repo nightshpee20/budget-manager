@@ -1,45 +1,61 @@
 package uni.fmi.androidproject.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import uni.fmi.androidproject.R;
+import uni.fmi.androidproject.dao.TransactionDao;
 import uni.fmi.androidproject.model.Transaction;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder {
+        ConstraintLayout recyclerViewRow;
         ImageView isExpenseImageView;
         TextView descriptionTextView;
         TextView amountTextView;
         ImageView recurringImageView;
         TextView recurringTextView;
 
+        TextView transactionIdTextView;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            recyclerViewRow = itemView.findViewById(R.id.recyclerViewRow);
             isExpenseImageView = itemView.findViewById(R.id.isExpenseImageView);
             descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
             amountTextView = itemView.findViewById(R.id.amountTextView);
             recurringImageView = itemView.findViewById(R.id.recurringImageView);
             recurringTextView = itemView.findViewById(R.id.recurringTextView);
+            transactionIdTextView = itemView.findViewById(R.id.transactionIdTextView);
         }
     }
 
     private Context context;
     private List<Transaction> transactionList;
+    private Transaction currentTransaction;
+    private TransactionDao transactionDao;
+    private TextView balanceTextView;
 
-    public RecyclerViewAdapter(Context context, List<Transaction> transactionList) {
+    public RecyclerViewAdapter(Context context, List<Transaction> transactionList, TransactionDao transactionDao) {
         this.context = context;
         this.transactionList = transactionList;
+        this.transactionDao = transactionDao;
     }
 
     @NonNull
@@ -57,6 +73,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.descriptionTextView.setText(transaction.getDescription());
         holder.amountTextView.setText(transaction.getAmount().toString());
         holder.recurringImageView.setVisibility(transaction.getIsRecurring() ? View.VISIBLE : View.INVISIBLE);
+        holder.transactionIdTextView.setText("" + transaction.getId());
+        holder.transactionIdTextView.setVisibility(View.INVISIBLE);
         String text = null;
         if (transaction.getIsRecurring()) {
             text = switch (transaction.getInterval()) {
@@ -76,6 +94,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (text != null)
             holder.recurringTextView.setText(text);
         holder.recurringTextView.setVisibility(transaction.getIsRecurring() ? View.VISIBLE : View.INVISIBLE);
+        holder.recyclerViewRow.setOnClickListener(this::recyclerViewRowOnClick);
     }
 
     @Override
@@ -85,5 +104,59 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setTransactionList(List<Transaction> transactionList) {
         this.transactionList = transactionList;
+    }
+
+    public void recyclerViewRowOnClick(View view) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle("Choose an Option");
+        alertDialogBuilder.setMessage("Please select an option:");
+
+        alertDialogBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alertDialogBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ConstraintLayout constraintLayout = (ConstraintLayout) view;
+                int id = -1;
+                for (int i = 0; i < constraintLayout.getChildCount(); i++)
+                    if (constraintLayout.getChildAt(i).getId() == R.id.transactionIdTextView)
+                        id = Integer.parseInt(((TextView)constraintLayout.getChildAt(i)).getText().toString());
+                Transaction filter = new Transaction();
+                filter.setId(id);
+                Transaction transaction = transactionDao.getTransactionByFilter(filter).get(0);
+                transactionDao.deleteTransaction(transaction);
+                int index = -1;
+                for (int i = 0; i < transactionList.size(); i++)
+                    if (Objects.equals(transactionList.get(i).getId(), transaction.getId())) {
+                        index = i;
+                        break;
+                    }
+                transactionList.remove(index);
+                Double balance = Double.parseDouble(balanceTextView.getText().toString().substring(9));
+                balance += transaction.getIsIncome() ? transaction.getAmount() * -1 : transaction.getAmount();
+                balanceTextView.setText("Balance: " + balance);
+                notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void setBalanceTextView(TextView balanceTextView) {
+        this.balanceTextView = balanceTextView;
     }
 }

@@ -2,10 +2,12 @@ package uni.fmi.androidproject.activity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -80,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
         filter.setDate(LocalDate.now());
         List<Transaction> transactionList = transactionDao.getTransactionByFilter(filter);
         List<Transaction> filteredTransactionList = filterTransactionList(LocalDate.now(), LocalDate.now().toEpochDay(), transactionList);
-        recyclerViewAdapter = new RecyclerViewAdapter(this, filteredTransactionList);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, filteredTransactionList, transactionDao);
+        recyclerViewAdapter.setBalanceTextView(balanceTextView);
         transactionsRecyclerView.setAdapter(recyclerViewAdapter);
         transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
