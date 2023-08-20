@@ -145,27 +145,27 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 5:
                     long monthsBetween = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
-                    if (Math.abs(monthsBetween) == 1)
+                    if (Math.abs(monthsBetween) % 1 == 0 && filterDate.getDayOfMonth() == transaction.getDate().getDayOfMonth())
                         filteredTransactionList.add(transaction);
                     break;
                 case 6:
                     long monthsBetween1 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
-                    if (Math.abs(monthsBetween1) == 2)
+                    if (Math.abs(monthsBetween1) % 2 == 0 && filterDate.getDayOfMonth() == transaction.getDate().getDayOfMonth())
                         filteredTransactionList.add(transaction);
                     break;
                 case 7:
                     long monthsBetween2 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
-                    if (Math.abs(monthsBetween2) == 3)
+                    if (Math.abs(monthsBetween2) % 3 == 0 && filterDate.getDayOfMonth() == transaction.getDate().getDayOfMonth())
                         filteredTransactionList.add(transaction);
                     break;
                 case 8:
                     long monthsBetween3 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
-                    if (Math.abs(monthsBetween3) == 6)
+                    if (Math.abs(monthsBetween3) % 6 == 0 && filterDate.getDayOfMonth() == transaction.getDate().getDayOfMonth())
                         filteredTransactionList.add(transaction);
                     break;
                 case 9:
                     long monthsBetween4 = ChronoUnit.MONTHS.between(filterDate, transaction.getDate());
-                    if (Math.abs(monthsBetween4) == 12)
+                    if (Math.abs(monthsBetween4) % 12 == 0 && filterDate.getDayOfMonth() == transaction.getDate().getDayOfMonth())
                         filteredTransactionList.add(transaction);
                     break;
             }
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             updateRecyclerView();
-            LocalDate selectedDateLocalDate = (LocalDate) dateTimeFormatter.parse(selectedDate);
+            LocalDate selectedDateLocalDate = LocalDate.parse(selectedDate, dateTimeFormatter);
             updateBalanceTextView(selectedDateLocalDate.getYear(), selectedDateLocalDate.getMonthValue(), selectedDateLocalDate.getDayOfMonth());
         }
     }

@@ -39,6 +39,7 @@ import uni.fmi.androidproject.database.DataBaseHelper;
 import uni.fmi.androidproject.model.Transaction;
 
 public class RegisterLoginActivity extends AppCompatActivity {
+    private static final String PATH = "http://192.168.165.60:8080";
     private EditText usernameEditText,
                      passwordEditText;
 
@@ -105,7 +106,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
         }
 
         String hashedPassword = hashPassword(password);
-        String url = "http://192.168.165.60:8080/login";
+        String url = PATH + "/login";
         String json = "{\"user\": \"" + username + "\", \"pass\": \"" + hashedPassword + "\"}";
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody requestBody = RequestBody.create(json, mediaType);
@@ -137,7 +138,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                         List<Transaction> transactionList = transactionDao.getTransactionByFilter(new Transaction());
                         for (Transaction transaction : transactionList)
                             transaction.setUserId(id);
-                        String url = "http://192.168.165.60:8080/transaction/backup";
+                        String url = PATH + "/transaction/backup";
                         String json = gson.toJson(transactionList);
 
                         String setCookie = response.header("Set-Cookie");
@@ -175,7 +176,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
                         });
                     } else if (endpoint.equals("DOWNLOAD")) {
                         List<Transaction> transactionList;
-                        String url = "http://192.168.165.60:8080/transaction/download";
+                        String url = PATH + "/transaction/download";
 
                         String setCookie = response.header("Set-Cookie");
                         String session = setCookie.substring(11);
@@ -254,7 +255,7 @@ public class RegisterLoginActivity extends AppCompatActivity {
         }
 
         String hashedPassword = hashPassword(password);
-        String url = "http://192.168.165.60:8080/register";
+        String url = PATH + "/register";
         String json = "{\"user\": \"" + username + "\", \"pass\": \"" + hashedPassword + "\"}";
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody requestBody = RequestBody.create(json, mediaType);
