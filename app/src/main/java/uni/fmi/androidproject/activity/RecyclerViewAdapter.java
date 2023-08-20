@@ -1,7 +1,9 @@
 package uni.fmi.androidproject.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -114,6 +118,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         alertDialogBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ConstraintLayout constraintLayout = (ConstraintLayout) view;
+                int id = -1;
+                for (int i = 0; i < constraintLayout.getChildCount(); i++)
+                    if (constraintLayout.getChildAt(i).getId() == R.id.transactionIdTextView)
+                        id = Integer.parseInt(((TextView)constraintLayout.getChildAt(i)).getText().toString());
+                Transaction filter = new Transaction();
+                filter.setId(id);
+                Transaction transaction = transactionDao.getTransactionByFilter(filter).get(0);
+                Intent intent = new Intent(context, ExpenseIncomeActivity.class);
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+                String selectedDate = transaction.getDate().format(dateTimeFormatter);
+                intent.putExtra("ID", transaction.getId());
+                intent.putExtra("DATE", selectedDate);
+                intent.putExtra("DESCRIPTION", transaction.getDescription());
+                intent.putExtra("AMOUNT", transaction.getAmount());
+                intent.putExtra("IS_INCOME", transaction.getIsIncome());
+                intent.putExtra("IS_RECURRING", transaction.getIsRecurring());
+                if (transaction.getIsRecurring())
+                    intent.putExtra("INTERVAL", transaction.getInterval());
+                ((Activity) context).startActivityForResult(intent, Activity.RESULT_OK);
                 dialog.dismiss();
             }
         });

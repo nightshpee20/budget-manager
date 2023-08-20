@@ -193,4 +193,23 @@ public class TransactionDao {
         sqLiteDatabase.delete(T_TRANSACTION, ID + " = ?", new String[] {transaction.getId() + ""});
         sqLiteDatabase.close();
     }
+
+    public void updateTransaction(Transaction transaction) {
+        SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        if (transaction.getDescription() != null)
+            values.put("description", transaction.getDescription());
+        if (transaction.getAmount() != null)
+            values.put("amount", transaction.getAmount());
+        if (transaction.getIsIncome() != null)
+            values.put("is_income", transaction.getIsIncome());
+        if (transaction.getIsRecurring() != null)
+            values.put("is_recurring", transaction.getIsRecurring());
+        if (transaction.getInterval() != null)
+            values.put("interval", transaction.getInterval());
+
+        db.update(T_TRANSACTION, values, ID + " = ?", new String[]{String.valueOf(transaction.getId())});
+        db.close();
+    }
 }

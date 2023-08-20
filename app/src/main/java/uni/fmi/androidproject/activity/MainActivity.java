@@ -223,4 +223,15 @@ public class MainActivity extends AppCompatActivity {
         String text = String.format("Balance: %.2f", balance);
         balanceTextView.setText(text);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            updateRecyclerView();
+            LocalDate selectedDateLocalDate = (LocalDate) dateTimeFormatter.parse(selectedDate);
+            updateBalanceTextView(selectedDateLocalDate.getYear(), selectedDateLocalDate.getMonthValue(), selectedDateLocalDate.getDayOfMonth());
+        }
+    }
 }

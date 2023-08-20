@@ -36,6 +36,7 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
     private TextView isRecurringTextView;
     private TextView intervalTextView;
     private Spinner intervalSpinner;
+    private TextView labelTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +60,33 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
         isRecurringTextView = findViewById(R.id.expenseIncomeIsRecurringTextView);
         intervalTextView = findViewById(R.id.expenseIncomeIntervalTextView);
         intervalSpinner = findViewById(R.id.expenseIncomeIntervalSpinner);
+        labelTextView = findViewById(R.id.expenseIncomeLabelTextView);
+        String description = intent.getStringExtra("DESCRIPTION");
 
         intervalTextView.setVisibility(View.GONE);
         intervalSpinner.setVisibility(View.GONE);
+
+        if (description != null) {
+            labelTextView.setText("Edit Expense/Income");
+            descriptionEditText.setText(description);
+            amountEditText.setText(intent.getDoubleExtra("AMOUNT",0) + "");
+            boolean isIncome = intent.getBooleanExtra("IS_INCOME", false);
+            if (isIncome) {
+                isIncomeSwitch.setChecked(true);
+                isIncomeTextView.setText("Income");
+            }
+            boolean isRecurring = intent.getBooleanExtra("IS_RECURRING", false);
+            if (isRecurring) {
+                isRecurringSwitch.setChecked(true);
+                isRecurringTextView.setText("True");
+            }
+            if (isRecurring) {
+                int interval = intent.getIntExtra("INTERVAL", -1);
+                intervalSpinner.setVisibility(View.VISIBLE);
+                intervalSpinner.setSelection(interval);
+                intervalTextView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void isExpenseSwitchOnClick(View view) {
@@ -130,13 +155,20 @@ public class ExpenseIncomeActivity extends AppCompatActivity {
         }
 
         Transaction transaction = new Transaction(description, amount, date, isExpense, isRecurring, interval);
-        boolean isSuccessful = transactionDao.insertTransaction(transaction);
-        if (isSuccessful) {
+        if (labelTextView.getText().toString().startsWith("Edit")) {
+            int id = intent.getIntExtra("ID", -1);
+            transaction.setId(id);
+            transactionDao.updateTransaction(transaction);
             setResult(RESULT_OK);
             finish();
+        } else {
+            boolean isSuccessful = transactionDao.insertTransaction(transaction);
+            if (isSuccessful) {
+                setResult(RESULT_OK);
+                finish();
+            } else
+                Toast.makeText(this, "ERROR: Something went wrong.", Toast.LENGTH_LONG).show();
         }
-        else
-            Toast.makeText(this, "ERROR: Something went wrong.", Toast.LENGTH_LONG).show();
     }
     public void goBackButtonOnClick(View view) {
         finish();
